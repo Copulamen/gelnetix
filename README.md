@@ -2,7 +2,7 @@
 ### Graphical Elastic Net for Mixed Data
 
 [![CI](https://github.com/jcathalina/gelnetix/actions/workflows/ci.yaml/badge.svg)](https://github.com/jcathalina/gelnetix/actions/workflows/ci.yaml)
-[![License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](https://www.gnu.org/licenses/mit.html) 
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/license/mit/) 
 
 ### About
 
