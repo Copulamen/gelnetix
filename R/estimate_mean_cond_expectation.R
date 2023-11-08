@@ -1,4 +1,4 @@
-#' Estimates the conditional expectation of the mean of a multivariate normal distribution.
+#' Estimates the...TODO.
 #' 
 #' @param idx The index of the variable whose conditional expectation is to be estimated.
 #' @param n The number of observations.
