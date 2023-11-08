@@ -1,3 +1,5 @@
+library("tmvtnorm")
+
 #' Estimates the...TODO.
 #' 
 #' @param idx The index of the variable whose conditional expectation is to be estimated.
@@ -19,21 +21,75 @@ estimate_cond_expectation <- function(idx, n, p, theta, lower, upper, mc_iters, 
     H = theta,
     lower = lower[idx, ],
     upper = upper[idx, ],
-    burn.in.samples = burn_in_samples,
-    algorithm = "gibbs",
+    burn.in.samples = burn_in_samples
   )
 
   # FIXME: We can vectorize this by using apply() or something.
+  # FIXME: I have no idea what this is supposed to return exactly...
   # See https://stackoverflow.com/questions/58242399/how-to-perform-dot-product-on-each-row-of-a-data-table
-  sum <- 0
-  for (i in 1:mc_iters) {
-    sum <- sum + (gaussian_latent_vars[i, ] %*% t(gaussian_latent_vars[i, ]))
-  }
+  # running_sum <- 0
+  # for (i in 1:mc_iters) {
+  #   running_sum <- running_sum + (gaussian_latent_vars[i, ] %*% t(gaussian_latent_vars[i, ]))
+  # }
+  row_sums <- rowSums(gaussian_latent_vars, t(gaussian_latent_vars))
+  running_sum <- row_sums
 
-  cond_expectation <- sum / mc_iters
+  cond_expectation <- running_sum / mc_iters
   return(cond_expectation)
 }
 
 estimate_mean_cond_expectation <- function() {
   # TODO
+}
+
+#' Calculates cut-points of ordinal variables with respect to the Gaussian copula.
+#' 
+#' @param dataset An n by p matrix or a `data.frame` instance,
+#' where n is the number of observations and p is the number of variables.
+#' 
+#' @example
+#' TODO
+calc_cut_points <- function(dataset) {
+  p <- ncol(dataset)
+  n <- nrow(dataset)
+  k <- unique(sort(unlist(dataset)))
+  n_levels <- length(k)
+  q <- matrix(nrow = p, ncol = n_levels)
+  for (i in 1:p) {
+    X <- factor(dataset[, i], levels = k)
+    No <- tabulate(X, nbins = n_levels)
+    q[i, ] <- qnorm(cumsum(No) / n)
+  }
+  q[, n_levels] <- Inf
+  q <- cbind(-Inf, q)
+  return(q)
+}
+
+#' Calculates lower and upper bands for each data point, using a set of cut-points obtained from the Gaussian copula.
+#' 
+#' @param dataset An n by p matrix or a `data.frame` instance,
+#' where n is the number of observations and p is the number of variables.
+#' 
+#' @example 
+#' TODO
+get_lower_upper_bands <- function(dataset) {
+  cutoffs <- calc_cut_points(dataset)
+  levels <- unique(sort(unlist(dataset)))
+  n <- nrow(dataset)
+  p <- ncol(dataset)
+  lower <- matrix(nrow = n, ncol = p)
+  upper <- matrix(nrow = n, ncol = p)
+  for (i in 1:n) {
+    sel <- match(dataset[i, ], levels)
+    lower[i, ] <- apply(cbind(sel, cutoffs), 1, function(x) {
+      x[x[1] + 1]
+    })
+    upper[i, ] <- apply(cbind(sel, cutoffs), 1, function(x) {
+      x[x[1] + 2]
+    })
+  }
+  lower[is.na(lower)] <- -Inf
+  upper[is.na(upper)] <- Inf
+
+  return(list(lower = lower, upper = upper))
 }
