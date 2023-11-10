@@ -1,4 +1,8 @@
 library("tmvtnorm")
+library("Rcpp")
+
+Rcpp::sourceCpp("/home/gelnetix/gelnetix/src/rowwise_outer_summation.cpp")
+Rcpp::sourceCpp("/home/gelnetix/gelnetix/src/parallel_rowwise_outer_summation.cpp")
 
 #' Estimates the...TODO.
 #' 
@@ -14,7 +18,7 @@ library("tmvtnorm")
 #' 
 #' @examples
 #' ...TODO
-estimate_cond_expectation <- function(idx, n, p, theta, lower, upper, mc_iters, burn_in_samples, verbose = FALSE) {
+estimate_cond_expectation <- function(idx, p, theta, lower, upper, mc_iters, burn_in_samples, verbose = FALSE) {
   # Z = (Z_1, ..., Z_p), where Z ~ N_p(0, \Omega)
   gaussian_latent_vars <- rtmvnorm.sparseMatrix(
     n = mc_iters,
@@ -24,15 +28,7 @@ estimate_cond_expectation <- function(idx, n, p, theta, lower, upper, mc_iters, 
     burn.in.samples = burn_in_samples
   )
 
-  # FIXME: We can vectorize this by using apply() or something.
-  # FIXME: I have no idea what this is supposed to return exactly...
-  # See https://stackoverflow.com/questions/58242399/how-to-perform-dot-product-on-each-row-of-a-data-table
-  # running_sum <- 0
-  # for (i in 1:mc_iters) {
-  #   running_sum <- running_sum + (gaussian_latent_vars[i, ] %*% t(gaussian_latent_vars[i, ]))
-  # }
-  row_sums <- rowSums(gaussian_latent_vars, t(gaussian_latent_vars))
-  running_sum <- row_sums
+  running_sum <- parallel_mc_loop(gaussian_latent_vars, mc_iters)
 
   cond_expectation <- running_sum / mc_iters
   return(cond_expectation)
