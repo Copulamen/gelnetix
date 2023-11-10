@@ -28,14 +28,39 @@ estimate_cond_expectation <- function(idx, p, theta, lower, upper, mc_iters, bur
     burn.in.samples = burn_in_samples
   )
 
-  running_sum <- parallel_mc_loop(gaussian_latent_vars, mc_iters)
+  running_sum <- mc_loop(gaussian_latent_vars, mc_iters)
 
   cond_expectation <- running_sum / mc_iters
   return(cond_expectation)
 }
 
-estimate_mean_cond_expectation <- function() {
-  # TODO
+estimate_mean_cond_expectation <- function(dataset, theta, mc_iters, burn_in_samples, verbose = FALSE) {
+  sample_cov_mat <- 0
+  p <- ncol(dataset)
+  n <- nrow(dataset)
+  lower_upper_bands <- get_lower_upper_bands(dataset)
+  lower <- lower_upper_bands$lower
+  upper <- lower_upper_bands$upper
+
+  scovs <- lapply(1:n, function(i) {
+    estimate_cond_expectation(
+      idx = i,
+      p = p,
+      theta = theta,
+      lower = lower,
+      upper = upper,
+      mc_iters = mc_iters,
+      burn_in_samples = burn_in_samples,
+      verbose = verbose
+    )
+  })
+
+  for (i in 1:n) {
+    sample_cov_mat <- sample_cov_mat + scovs[[i]]
+  }
+
+  mean_cond_exp <- cov2cor(sample_cov_mat/n)
+  return(mean_cond_exp)
 }
 
 #' Calculates cut-points of ordinal variables with respect to the Gaussian copula.
