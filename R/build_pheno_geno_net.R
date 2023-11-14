@@ -15,18 +15,17 @@ build_pheno_geno_net <- function(dataset, rho_vector, alpha_vector, max_em_iters
             estimate[[chain_idx]] <- vector("list", num_rho)
             theta <- sparseMatrix(i=1:ncol(dataset), j=1:ncol(dataset), x=1)
             estimate[[chain_idx]] <- calculate_em(dataset,
-                                                rho = rho[[chain_idx]],
+                                                rho = rho_vector[[chain_idx]],
                                                 theta = theta,
                                                 mc_iters = 1000,
                                                 max_em_iters = max_em_iters,
                                                 burn_in_samples = 100,
                                                 tol = tol)
-        }
-        else {
+        } else {
             estimate[[chain_idx]] <- vector("list", num_rho)
             theta <- estimate[[(chain_idx - 1)]]$theta
             estimate[[chain_idx]] <- calculate_em(dataset,
-                                            rho = rho[[chain_idx]],
+                                            rho = rho_vector[[chain_idx]],
                                             theta = theta,
                                             mc_iters = 1000,
                                             max_em_iters = max_em_iters,
