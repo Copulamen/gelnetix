@@ -1,8 +1,8 @@
 library("tmvtnorm")
 library("Rcpp")
 
-Rcpp::sourceCpp("/home/gelnetix/gelnetix/src/rowwise_outer_summation.cpp")
-Rcpp::sourceCpp("/home/gelnetix/gelnetix/src/parallel_rowwise_outer_summation.cpp")
+Rcpp::sourceCpp("src/rowwise_outer_summation.cpp")
+Rcpp::sourceCpp("src/parallel_rowwise_outer_summation.cpp")
 
 #' Estimates the...TODO.
 #' 
