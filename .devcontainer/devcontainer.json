@@ -14,7 +14,8 @@
 				"eamodio.gitlens",
 				"REditorSupport.r",
 				"Mikhail-Arkhipov.r",
-				"RDebugger.r-debugger"
+				"RDebugger.r-debugger",
+				"ms-vscode.cpptools-extension-pack"
 			]
 		}
 	}
