@@ -1,14 +1,29 @@
 Package: Gelnetix
 Title: Graphical Elastic Net for Mixed Data 
 Version: 0.1.0
-Date: 2023-12-31
-Author: Rocherno de Jongh and Julius Cathalina
-Maintainer: Julius Cathalina <julius.cathalina@gmail.com>
+Authors@R: c(
+    person("Julius", "Cathalina", email = "julius.cathalina@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0006-1898-6199")),
+    person("Rocherno", "de Jongh", email = "", role = c("aut", "cre"), comment = c(ORCID = "")),
+)
 Description: Graphical Elastic Net for Mixed Data ...TODO
+License: MIT
 Depends: R (>= 4.2)
-Imports: Rcpp
+Imports: 
+    Rcpp,
+    RcppArmadillo,
+    RcppParallel,
+    tmvtnorm,
+    gelnet,
+    glasso,
+    gmm
 LinkingTo: Rcpp
+Suggests:
+    testthat,
+    microbenchmark
 URL: https://github.com/jcathalina/gelnetix
 BugReports: https://github.com/jcathalina/gelnetix/issues
 License: MIT
-RoxygenNote: 6.0.1
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+SystemRequirements: C++11
