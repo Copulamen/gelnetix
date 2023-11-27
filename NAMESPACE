@@ -1,5 +1,3 @@
 useDynLib("Gelnetix", .registration=TRUE)
 
-export("estimate_cond_expectation")
-
-importFrom("Rcpp", "evalCpp", "tmvtnorm")
+importFrom("Rcpp", "evalCpp")
