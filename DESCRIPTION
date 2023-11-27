@@ -20,10 +20,10 @@ LinkingTo: Rcpp
 Suggests:
     testthat,
     microbenchmark
-URL: https://github.com/jcathalina/gelnetix
-BugReports: https://github.com/jcathalina/gelnetix/issues
+URL: https://github.com/Copulamen/gelnetix
+BugReports: https://github.com/Copulamen/gelnetix/issues
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-SystemRequirements: C++11
+SystemRequirements: C++17
