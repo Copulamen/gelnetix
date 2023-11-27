@@ -16,7 +16,12 @@
 				"Mikhail-Arkhipov.r",
 				"RDebugger.r-debugger",
 				"ms-vscode.cpptools-extension-pack"
-			]
+			],
+			"settings": {
+				"C_Cpp.default.includePath": [
+					"/root/.cache/R/renv/cache/v5/R-4.3/x86_64-pc-linux-gnu/**"
+				]
+			}
 		}
 	}
 }
